@@ -1,6 +1,6 @@
-# Vectron Studios website
+# Vectron Dynamics website
 
-Responsive black-and-white company site for Vectron Studios.
+Responsive black-and-white company site for Vectron Dynamics.
 
 ## Files
 - `index.html` — website layout, responsive styles, interactive navigation, animated CSS 3D elements and contact form.
@@ -12,4 +12,4 @@ Responsive black-and-white company site for Vectron Studios.
 3. Select branch `main` and folder `/(root)`, then Save.
 
 ## Before launch
-In `index.html`, replace `YOUR_EMAIL@example.com` with the official company email. The contact form uses the visitor's email app and does not store submissions. The System Optimizer launch date is displayed as 1 November 2026.
+The contact form is configured for the company email address. The contact form uses the visitor's email app and does not store submissions. The System Optimizer launch date is displayed as 1 November 2026.
