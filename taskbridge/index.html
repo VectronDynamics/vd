@@ -24,7 +24,7 @@
     @media(max-width:850px){.hero{gap:28px}.task-layout{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}.navlinks{gap:14px}.navlinks a{font-size:11px}}
     @media(max-width:650px){.wrap{width:min(100% - 28px,1160px)}.nav{height:68px}.brand img{width:37px;height:37px}.navlinks{display:none;position:absolute;top:68px;left:0;right:0;padding:18px 22px;background:var(--surface);border-bottom:1px solid var(--line);flex-direction:column;align-items:flex-start}.navlinks.open{display:flex}.menu-toggle{display:block}.navright .btn{display:none}.hero{grid-template-columns:1fr;padding:55px 0 48px}.hero h1{font-size:clamp(47px,13vw,70px)}.lead{font-size:14px}.preview{transform:none}.section{padding:55px 0}.section-head{display:block}.section-head p{margin-top:13px}.features{grid-template-columns:1fr}.dash-shell{padding:12px;border-radius:18px}.dash-top{display:block}.local-label{margin-top:13px}.task-panel,.form-panel{padding:12px}.task-actions{flex-direction:column}.two-fields{grid-template-columns:1fr 1fr}.metric{padding:13px}.metric-value{font-size:24px}}
     @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important}}
-  </style>
+    #authPanel{background:var(--surface)}\n</style>
 </head>
 <body>
   <header class="topbar">
@@ -41,7 +41,7 @@
         <h1>A clearer day.<br>One task<br>at a time.</h1>
         <p class="lead">Your tasks, deadlines, and notes. Together in one simple workspace.</p>
         <div class="hero-actions"><a class="btn primary" href="#dashboard">Open dashboard <span aria-hidden="true">↘</span></a><a class="btn" href="#features">Explore features</a></div>
-        <div class="trustline"><span class="dot"></span> A simple task list. Saved in your browser.</div>
+        <div class="trustline"><span class="dot"></span> Sign in to keep your tasks in sync across devices.</div>
       </div>
       <div class="preview" aria-label="Preview of a task dashboard">
         <div class="preview-head"><div><strong>Your focus board</strong><br><span>A little progress adds up.</span></div><img src="logo.svg" alt="" width="38" height="38"></div>
@@ -59,7 +59,7 @@
         <div class="features">
           <article class="feature"><div class="feature-icon" aria-hidden="true">✦</div><h3>Capture</h3><p>Add a task and a due date. Keep moving.</p></article>
           <article class="feature"><div class="feature-icon" aria-hidden="true">◷</div><h3>Stay organised</h3><p>See what's due today, what is coming up, and what you have already finished.</p></article>
-          <article class="feature"><div class="feature-icon" aria-hidden="true">⌁</div><h3>More to come</h3><p>Email, voice entry, and sync are on the roadmap.</p></article>
+          <article class="feature"><div class="feature-icon" aria-hidden="true">⌁</div><h3>More to come</h3><p>Sign in to sync your tasks across devices.</p></article>
         </div>
       </div>
     </section>
@@ -67,7 +67,7 @@
       <div class="wrap">
         <div class="section-head"><div><div class="eyebrow">Your workspace</div><h2>Make it happen.</h2></div><p>Add, edit, and organise your tasks.</p></div>
         <div class="dash-shell">
-          <div class="dash-top"><div><div class="eyebrow">Task overview</div><h2 id="greeting">Your dashboard</h2><p id="todayLabel">Your tasks, all in one place.</p></div><span class="local-label">Saved on this device</span></div>
+          <div class="dash-top"><div><div class="eyebrow">Task overview</div><h2 id="greeting">Your dashboard</h2><p id="todayLabel">Your tasks, all in one place.</p></div><span class="local-label" id="storageLabel">Saved on this device</span></div>
           <div class="stats">
             <div class="metric"><div class="metric-label">All tasks</div><div class="metric-value" id="totalCount">0</div><div class="metric-sub">Everything on your list</div></div>
             <div class="metric"><div class="metric-label">Due today</div><div class="metric-value" id="todayCount">0</div><div class="metric-sub">Tasks with today's date</div></div>
@@ -107,11 +107,11 @@
     </section>
   </main>
   <footer class="wrap footer"><a class="footer-brand" href="#home"><img src="logo.svg" alt=""> VECTRON DYNAMICS</a><span>© <span id="year"></span> Vectron Dynamics · TaskBridge</span><a href="#home">Back to top ↑</a></footer>
-  <div class="wrap footnote">Early demo. Tasks are stored in this browser and do not sync across devices. Automatic reminders and email integrations are not active yet.</div>
+  <div class="wrap footnote">When signed in, your tasks sync privately to your account. Email verification may be required. Keep your password private.</div>
   <script>
     (() => {
       const $ = (selector) => document.querySelector(selector);
-      const STORE_KEY = 'taskbridge.tasks.v1';
+      const STORE_KEY = 'taskbridge.tasks.v1';\n      const db = window.supabase.createClient('https://qtiksxvytxznzgcprsxc.supabase.co','sb_publishable_0VQNiRiSPLtwgGEHY7uAEw_K5YIeLZl');\n      let currentUser = null;
       const THEME_KEY = 'taskbridge.theme.v1';
       const today = () => {
         const d = new Date();
@@ -130,7 +130,67 @@
       let tasks = readTasks();
       let activeFilter = 'all';
       let editingId = null;
-      const save = () => { try { localStorage.setItem(STORE_KEY, JSON.stringify(tasks)); } catch { $('#formMessage').textContent = 'Browser storage is unavailable. Your changes may not persist.'; } };
+      const save = () => {
+        try { localStorage.setItem(STORE_KEY, JSON.stringify(tasks)); } catch { $('#formMessage').textContent = 'Browser storage is unavailable. Your changes may not persist.'; }
+        if (currentUser) syncCloud().catch(err => { $('#formMessage').textContent = 'Cloud sync error: ' + err.message; });
+      };
+      const cloudRows = () => tasks.map(t => ({id:t.id,user_id:currentUser.id,title:t.title,notes:t.notes||'',due:t.due||null,priority:t.priority||'medium',category:t.category||'Personal',completed:!!t.completed,created_at:t.createdAt||new Date().toISOString(),updated_at:t.updatedAt||null,completed_at:t.completedAt||null}));
+      const syncCloud = async () => {
+        if (!currentUser) return;
+        const {data:existing,error:readError}=await db.from('tasks').select('id'); if(readError) throw readError;
+        const keep=new Set(tasks.map(t=>t.id));
+        const obsolete=(existing||[]).filter(r=>!keep.has(r.id)).map(r=>r.id);
+        if(obsolete.length){const {error}=await db.from('tasks').delete().in('id',obsolete);if(error)throw error;}
+        const rows=cloudRows();
+        if(rows.length){const {error}=await db.from('tasks').upsert(rows,{onConflict:'id'});if(error)throw error;}
+      };
+      const loadCloud = async () => {
+        const {data,error}=await db.from('tasks').select('*').order('created_at',{ascending:true}); if(error)throw error;
+        if(!data.length && tasks.length){
+          const rows=cloudRows().map(({id,...row})=>row);
+          if(rows.length){const {error:insertError}=await db.from('tasks').insert(rows);if(insertError)throw insertError;}
+          const {data:reloaded,error:reloadError}=await db.from('tasks').select('*').order('created_at',{ascending:true});if(reloadError)throw reloadError;
+          tasks=reloaded.map(t=>({id:t.id,title:t.title,notes:t.notes||'',due:t.due||'',priority:t.priority,category:t.category,completed:t.completed,createdAt:t.created_at,updatedAt:t.updated_at,completedAt:t.completed_at}));
+        } else tasks=data.map(t=>({id:t.id,title:t.title,notes:t.notes||'',due:t.due||'',priority:t.priority,category:t.category,completed:t.completed,createdAt:t.created_at,updatedAt:t.updated_at,completedAt:t.completed_at}));
+        render();
+      };
+      const authMessage = (s,err=false) => { $('#authMessage').textContent=s; $('#authMessage').style.color=err?'var(--danger)':'var(--accent)'; };
+      const authUI = () => {
+        const signed=!!currentUser; $('#authState').textContent=signed?'Signed in':'Not signed in';
+        $('#authHeading').textContent=signed?'Your account':'Save your tasks online';
+        $('#authHint').textContent=signed?'Your tasks are synced to your account across devices.':'Create an account or sign in to sync your tasks across devices.';
+        $('#authEmail').hidden=signed;$('#authPassword').hidden=signed;
+        document.querySelectorAll('#authForm label').forEach(el=>el.hidden=signed);
+        $('#signInBtn').hidden=signed;$('#signUpBtn').hidden=signed;$('#signOutBtn').hidden=!signed;
+        $('#storageLabel').textContent=signed?'Synced to your account':'Saved on this device';
+      };
+      $('#authForm').addEventListener('submit',async e=>{
+        e.preventDefault(); const email=$('#authEmail').value.trim(),password=$('#authPassword').value;
+        authMessage('Signing in…');
+        const {data,error}=await db.auth.signInWithPassword({email,password});
+        if(error){authMessage(error.message,true);return;}
+        currentUser=data.user;authUI();
+        try{await loadCloud();authMessage('Signed in. Your tasks are synced.');}catch(err){authMessage('Could not load tasks: '+err.message,true);}
+      });
+      $('#signUpBtn').addEventListener('click',async()=>{
+        const email=$('#authEmail').value.trim(),password=$('#authPassword').value;
+        if(!email||!password){authMessage('Enter your email and a password of at least 6 characters.',true);return;}
+        authMessage('Creating account…');
+        const {data,error}=await db.auth.signUp({email,password,options:{emailRedirectTo:location.origin+location.pathname}});
+        if(error){authMessage(error.message,true);return;}
+        if(data.session){currentUser=data.user;authUI();try{await loadCloud();authMessage('Account created and signed in.');}catch(err){authMessage(err.message,true);}}
+        else authMessage('Account created. Check your email for a verification link, then sign in here.');
+      });
+      $('#signOutBtn').addEventListener('click',async()=>{
+        const {error}=await db.auth.signOut();if(error){authMessage(error.message,true);return;}
+        currentUser=null;try{tasks=JSON.parse(localStorage.getItem(STORE_KEY)||'[]');}catch{tasks=[];}
+        authUI();render();authMessage('Signed out. Your cloud tasks remain in your account.');
+      });
+      db.auth.onAuthStateChange(async(_event,session)=>{
+        if(!session?.user){currentUser=null;authUI();return;}
+        currentUser=session.user;authUI();
+        try{await loadCloud();authMessage('Your tasks are synced.');}catch(err){authMessage('Cloud sync error: '+err.message,true);}
+      });
       const setTheme = (theme) => {
         const next = theme === 'light' ? 'light' : 'dark';
         document.documentElement.dataset.theme = next;
