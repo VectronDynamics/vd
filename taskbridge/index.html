@@ -25,14 +25,42 @@
     @media(max-width:650px){.wrap{width:min(100% - 28px,1160px)}.nav{height:68px}.brand img{width:37px;height:37px}.navlinks{display:none;position:absolute;top:68px;left:0;right:0;padding:18px 22px;background:var(--surface);border-bottom:1px solid var(--line);flex-direction:column;align-items:flex-start}.navlinks.open{display:flex}.menu-toggle{display:block}.navright .btn{display:none}.hero{grid-template-columns:1fr;padding:55px 0 48px}.hero h1{font-size:clamp(47px,13vw,70px)}.lead{font-size:14px}.preview{transform:none}.section{padding:55px 0}.section-head{display:block}.section-head p{margin-top:13px}.features{grid-template-columns:1fr}.dash-shell{padding:12px;border-radius:18px}.dash-top{display:block}.local-label{margin-top:13px}.task-panel,.form-panel{padding:12px}.task-actions{flex-direction:column}.two-fields{grid-template-columns:1fr 1fr}.metric{padding:13px}.metric-value{font-size:24px}}
     @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important}}
     #authPanel{background:var(--surface)}
+
+    .auth-gate{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;overflow-y:auto;padding:28px 16px;background:var(--bg)}
+    .auth-gate[hidden]{display:none}
+    .auth-gate-card{width:min(100%,460px);padding:clamp(24px,5vw,42px);border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+    .auth-brand{display:flex;align-items:center;gap:12px;margin-bottom:36px}.auth-brand img{width:42px;height:42px}.auth-brand strong,.auth-brand span{display:block}.auth-brand strong{font-size:12px;letter-spacing:.13em}.auth-brand span{margin-top:4px;color:var(--muted);font-size:11px}
+    .auth-gate-kicker{font-size:10px;letter-spacing:.13em;font-weight:700;color:var(--muted)}.auth-gate-card h1{font-size:clamp(34px,7vw,46px);letter-spacing:-.06em;margin:10px 0}.auth-gate-copy{color:var(--muted);font-size:13px;line-height:1.7;margin:0 0 24px}
+    .auth-gate #authPanel{border:0;padding:0;background:transparent}.auth-gate #authHeading,.auth-gate #authState{display:none}.auth-gate #authHint{display:none}.auth-gate #authForm .two-fields{grid-template-columns:1fr}.auth-gate #authForm .field{margin-bottom:15px}.auth-gate #authForm .field label{font-size:12px}.auth-gate #authForm .field input{padding:13px 12px;font-size:14px}.auth-gate #authForm .form-actions{display:grid;grid-template-columns:1fr 1fr}.auth-gate #signOutBtn{display:none!important}.auth-gate .form-message{min-height:22px;line-height:1.5}
+    .auth-privacy{font-size:10px;color:var(--muted);line-height:1.6;margin:22px 0 0}
+    .profile-wrap{position:relative}.profile-button{display:grid;place-items:center;width:40px;height:40px;border:1px solid var(--line);border-radius:50%;background:var(--surface);color:var(--text);padding:8px}.profile-button svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}.profile-button:hover{border-color:var(--muted)}.profile-dropdown{position:absolute;right:0;top:48px;width:220px;padding:10px;border:1px solid var(--line);border-radius:10px;background:var(--surface);box-shadow:0 12px 32px #0002;z-index:50}.profile-dropdown[hidden]{display:none}.profile-email{padding:8px 9px 12px;font-size:11px;color:var(--muted);overflow-wrap:anywhere;border-bottom:1px solid var(--line)}.profile-signout{width:100%;margin-top:8px;text-align:left;padding:10px;border:0;border-radius:6px;background:transparent;color:var(--text);font-size:12px}.profile-signout:hover{background:var(--surface2)}
+    @media(max-width:650px){.auth-gate-card{padding:24px 20px}.auth-brand{margin-bottom:28px}}
 </style>
 </head>
 <body>
+  <div class="auth-gate" id="authGate">
+    <div class="auth-gate-card">
+      <div class="auth-brand"><img src="logo.svg" alt="TaskBridge logo"><div><strong>TASKBRIDGE</strong><span>by Vectron Dynamics</span></div></div>
+      <p class="auth-gate-kicker">YOUR WORKSPACE, YOUR TASKS</p>
+      <h1 id="gateTitle">Welcome back.</h1>
+      <p class="auth-gate-copy" id="gateCopy">Sign in or create an account to continue to TaskBridge.</p>
+          <section class="form-panel" id="authPanel" aria-label="Account" style="margin-bottom:18px">
+            <div class="panel-head"><h3 id="authHeading">Save your tasks online</h3><span class="count" id="authState">Not signed in</span></div>
+            <p class="form-hint" id="authHint">Create an account or sign in to sync your tasks across devices.</p>
+            <form id="authForm"><div class="two-fields">
+              <div class="field"><label for="authEmail">Email</label><input id="authEmail" type="email" autocomplete="email" maxlength="254" required placeholder="you@example.com"></div>
+              <div class="field"><label for="authPassword">Password</label><input id="authPassword" type="password" autocomplete="current-password" minlength="6" required placeholder="At least 6 characters"></div>
+            </div><div class="form-actions"><button class="btn primary" id="signInBtn" type="submit">Sign in</button><button class="btn" id="signUpBtn" type="button">Create account</button><button class="btn ghost" id="signOutBtn" type="button" hidden>Sign out</button></div><div class="form-message" id="authMessage" role="status" aria-live="polite"></div></form>
+          
+      <p class="auth-privacy">Your tasks are saved privately to your account.</p>
+    </div>
+  </div>
+
   <header class="topbar">
     <div class="wrap nav">
       <a class="brand" href="#home" aria-label="TaskBridge home"><img src="logo.svg" alt="TaskBridge logo"><span>TASK<br>BRIDGE</span></a>
       <nav class="navlinks" id="navlinks" aria-label="Main navigation"><a href="#features">Features</a><a href="#dashboard">Dashboard</a><a href="#about">About</a></nav>
-      <div class="navright"><button class="theme-toggle" id="themeToggle" aria-label="Switch to light theme" title="Switch theme">☼</button><a class="btn primary" href="#dashboard">Open dashboard <span aria-hidden="true">↗</span></a><button class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false">☰</button></div>
+      <div class="navright"><button class="theme-toggle" id="themeToggle" aria-label="Switch to light theme" title="Switch theme">☼</button><a class="btn primary" href="#dashboard">Open dashboard <span aria-hidden="true">↗</span></a><div class="profile-wrap" id="profileWrap" hidden><button class="profile-button" id="profileButton" aria-label="Open profile menu" aria-expanded="false" title="Profile"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.2"></circle><path d="M5.5 20c.5-4 2.7-6 6.5-6s6 2 6.5 6"></path></svg></button><div class="profile-dropdown" id="profileDropdown" hidden><div class="profile-email" id="profileEmail"></div><button type="button" id="profileSignOutBtn" class="profile-signout">Sign out</button></div></div><button class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false">☰</button></div>
     </div>
   </header>
   <main id="home">
@@ -68,14 +96,7 @@
       <div class="wrap">
         <div class="section-head"><div><div class="eyebrow">Your workspace</div><h2>Make it happen.</h2></div><p>Add, edit, and organise your tasks.</p></div>
         <div class="dash-shell">
-          <section class="form-panel" id="authPanel" aria-label="Account" style="margin-bottom:18px">
-            <div class="panel-head"><h3 id="authHeading">Save your tasks online</h3><span class="count" id="authState">Not signed in</span></div>
-            <p class="form-hint" id="authHint">Create an account or sign in to sync your tasks across devices.</p>
-            <form id="authForm"><div class="two-fields">
-              <div class="field"><label for="authEmail">Email</label><input id="authEmail" type="email" autocomplete="email" maxlength="254" required placeholder="you@example.com"></div>
-              <div class="field"><label for="authPassword">Password</label><input id="authPassword" type="password" autocomplete="current-password" minlength="6" required placeholder="At least 6 characters"></div>
-            </div><div class="form-actions"><button class="btn primary" id="signInBtn" type="submit">Sign in</button><button class="btn" id="signUpBtn" type="button">Create account</button><button class="btn ghost" id="signOutBtn" type="button" hidden>Sign out</button></div><div class="form-message" id="authMessage" role="status" aria-live="polite"></div></form>
-          </section>
+</section>
           <div class="dash-top"><div><div class="eyebrow">Task overview</div><h2 id="greeting">Your dashboard</h2><p id="todayLabel">Your tasks, all in one place.</p></div><span class="local-label" id="storageLabel">Saved on this device</span></div>
           <div class="stats">
             <div class="metric"><div class="metric-label">All tasks</div><div class="metric-value" id="totalCount">0</div><div class="metric-sub">Everything on your list</div></div>
@@ -168,13 +189,16 @@
       };
       const authMessage = (s,err=false) => { $('#authMessage').textContent=s; $('#authMessage').style.color=err?'var(--danger)':'var(--accent)'; };
       const authUI = () => {
-        const signed=!!currentUser; $('#authState').textContent=signed?'Signed in':'Not signed in';
-        $('#authHeading').textContent=signed?'Your account':'Save your tasks online';
-        $('#authHint').textContent=signed?'Your tasks are synced to your account across devices.':'Create an account or sign in to sync your tasks across devices.';
-        $('#authEmail').hidden=signed;$('#authPassword').hidden=signed;
-        document.querySelectorAll('#authForm label').forEach(el=>el.hidden=signed);
-        $('#signInBtn').hidden=signed;$('#signUpBtn').hidden=signed;$('#signOutBtn').hidden=!signed;
+        const signed=!!currentUser;
+        $('#authGate').hidden=signed;
+        $('#authState').textContent=signed?'Signed in':'Not signed in';
+        $('#authEmail').hidden=false;$('#authPassword').hidden=false;
+        document.querySelectorAll('#authForm label').forEach(el=>el.hidden=false);
+        $('#signInBtn').hidden=false;$('#signUpBtn').hidden=false;$('#signOutBtn').hidden=true;
         $('#storageLabel').textContent=signed?'Synced to your account':'Saved on this device';
+        $('#profileWrap').hidden=!signed;
+        $('#profileEmail').textContent=signed?(currentUser.email||'Signed in'):'';
+        if(!signed){$('#profileDropdown').hidden=true;$('#profileButton').setAttribute('aria-expanded','false');}
       };
       $('#authForm').addEventListener('submit',async e=>{
         e.preventDefault(); const email=$('#authEmail').value.trim(),password=$('#authPassword').value;
@@ -192,15 +216,21 @@
         if(data.session){currentUser=data.user;authUI();authMessage('Account created. Loading your tasks…');}
         else authMessage('Account created. Check your email for a verification link, then sign in here.');
       });
-      $('#signOutBtn').addEventListener('click',async()=>{
+      const signOut = async () => {
         const {error}=await db.auth.signOut();if(error){authMessage(error.message,true);return;}
         currentUser=null;tasks=[];
         authUI();render();authMessage('Signed out. Your cloud tasks remain in your account.');
-      });
-      db.auth.onAuthStateChange(async(_event,session)=>{
-        if(!session?.user){currentUser=null;authUI();return;}
-        currentUser=session.user;authUI();
-        try{await loadCloud();authMessage('Your tasks are synced.');}catch(err){authMessage('Cloud sync error: '+err.message,true);}
+      };
+      $('#signOutBtn').addEventListener('click',signOut);
+      $('#profileSignOutBtn').addEventListener('click',signOut);
+      $('#profileButton').addEventListener('click',()=>{const open=$('#profileDropdown').hidden;$('#profileDropdown').hidden=!open;$('#profileButton').setAttribute('aria-expanded',String(open));});
+      document.addEventListener('click',e=>{if(!e.target.closest('#profileWrap')){$('#profileDropdown').hidden=true;$('#profileButton').setAttribute('aria-expanded','false');}});
+      authUI();
+      db.auth.onAuthStateChange((_event,session)=>{
+        currentUser=session?.user||null;
+        authUI();
+        if(currentUser) Promise.resolve().then(async()=>{try{await loadCloud();authMessage('Your tasks are synced.');}catch(err){authMessage('Cloud sync error: '+err.message,true);}});
+        else {tasks=[];render();}
       });
       const setTheme = (theme) => {
         const next = theme === 'light' ? 'light' : 'dark';
