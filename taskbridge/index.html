@@ -181,8 +181,7 @@
         authMessage('Signing in…');
         const {data,error}=await db.auth.signInWithPassword({email,password});
         if(error){authMessage(error.message,true);return;}
-        currentUser=data.user;authUI();
-        try{await loadCloud();authMessage('Signed in. Your tasks are synced.');}catch(err){authMessage('Could not load tasks: '+err.message,true);}
+        currentUser=data.user;authUI();authMessage('Signed in. Loading your tasks…');
       });
       $('#signUpBtn').addEventListener('click',async()=>{
         const email=$('#authEmail').value.trim(),password=$('#authPassword').value;
@@ -190,7 +189,7 @@
         authMessage('Creating account…');
         const {data,error}=await db.auth.signUp({email,password,options:{emailRedirectTo:location.origin+location.pathname}});
         if(error){authMessage(error.message,true);return;}
-        if(data.session){currentUser=data.user;authUI();try{await loadCloud();authMessage('Account created and signed in.');}catch(err){authMessage(err.message,true);}}
+        if(data.session){currentUser=data.user;authUI();authMessage('Account created. Loading your tasks…');}
         else authMessage('Account created. Check your email for a verification link, then sign in here.');
       });
       $('#signOutBtn').addEventListener('click',async()=>{
