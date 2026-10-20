@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title">
+  <title id="title">TaskBridge smart checklist logo</title>
+  <defs>
+    <linearGradient id="bg" x1="12" y1="8" x2="112" y2="120" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#56E0D0"/>
+      <stop offset="1" stop-color="#3878FF"/>
+    </linearGradient>
+    <linearGradient id="shine" x1="36" y1="22" x2="91" y2="101" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#E8F4FF"/>
+    </linearGradient>
+  </defs>
+  <rect x="5" y="5" width="118" height="118" rx="32" fill="#081321"/>
+  <rect x="10" y="10" width="108" height="108" rx="29" fill="url(#bg)"/>
+  <path d="M39 31h40a8 8 0 0 1 8 8v7" fill="none" stroke="#DDFBFF" stroke-width="5" stroke-linecap="round" opacity=".75"/>
+  <rect x="28" y="31" width="72" height="69" rx="15" fill="#0A1B31" fill-opacity=".92"/>
+  <path d="m39 50 5 5 9-10M39 68l5 5 9-10M39 86l5 5 9-10" fill="none" stroke="#58E5D6" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M61 51h25M61 69h25M61 87h16" fill="none" stroke="url(#shine)" stroke-width="4.5" stroke-linecap="round"/>
+  <path d="m91 19 3.2 7.8L102 30l-7.8 3.2L91 41l-3.2-7.8L80 30l7.8-3.2L91 19Z" fill="#FFF5B8"/>
+  <circle cx="101" cy="53" r="3" fill="#FFF5B8"/>
+</svg>
