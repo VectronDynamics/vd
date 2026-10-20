@@ -24,7 +24,8 @@
     @media(max-width:850px){.hero{gap:28px}.task-layout{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}.navlinks{gap:14px}.navlinks a{font-size:11px}}
     @media(max-width:650px){.wrap{width:min(100% - 28px,1160px)}.nav{height:68px}.brand img{width:37px;height:37px}.navlinks{display:none;position:absolute;top:68px;left:0;right:0;padding:18px 22px;background:var(--surface);border-bottom:1px solid var(--line);flex-direction:column;align-items:flex-start}.navlinks.open{display:flex}.menu-toggle{display:block}.navright .btn{display:none}.hero{grid-template-columns:1fr;padding:55px 0 48px}.hero h1{font-size:clamp(47px,13vw,70px)}.lead{font-size:14px}.preview{transform:none}.section{padding:55px 0}.section-head{display:block}.section-head p{margin-top:13px}.features{grid-template-columns:1fr}.dash-shell{padding:12px;border-radius:18px}.dash-top{display:block}.local-label{margin-top:13px}.task-panel,.form-panel{padding:12px}.task-actions{flex-direction:column}.two-fields{grid-template-columns:1fr 1fr}.metric{padding:13px}.metric-value{font-size:24px}}
     @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important}}
-    #authPanel{background:var(--surface)}\n</style>
+    #authPanel{background:var(--surface)}
+</style>
 </head>
 <body>
   <header class="topbar">
@@ -67,6 +68,14 @@
       <div class="wrap">
         <div class="section-head"><div><div class="eyebrow">Your workspace</div><h2>Make it happen.</h2></div><p>Add, edit, and organise your tasks.</p></div>
         <div class="dash-shell">
+          <section class="form-panel" id="authPanel" aria-label="Account" style="margin-bottom:18px">
+            <div class="panel-head"><h3 id="authHeading">Save your tasks online</h3><span class="count" id="authState">Not signed in</span></div>
+            <p class="form-hint" id="authHint">Create an account or sign in to sync your tasks across devices.</p>
+            <form id="authForm"><div class="two-fields">
+              <div class="field"><label for="authEmail">Email</label><input id="authEmail" type="email" autocomplete="email" maxlength="254" required placeholder="you@example.com"></div>
+              <div class="field"><label for="authPassword">Password</label><input id="authPassword" type="password" autocomplete="current-password" minlength="6" required placeholder="At least 6 characters"></div>
+            </div><div class="form-actions"><button class="btn primary" id="signInBtn" type="submit">Sign in</button><button class="btn" id="signUpBtn" type="button">Create account</button><button class="btn ghost" id="signOutBtn" type="button" hidden>Sign out</button></div><div class="form-message" id="authMessage" role="status" aria-live="polite"></div></form>
+          </section>
           <div class="dash-top"><div><div class="eyebrow">Task overview</div><h2 id="greeting">Your dashboard</h2><p id="todayLabel">Your tasks, all in one place.</p></div><span class="local-label" id="storageLabel">Saved on this device</span></div>
           <div class="stats">
             <div class="metric"><div class="metric-label">All tasks</div><div class="metric-value" id="totalCount">0</div><div class="metric-sub">Everything on your list</div></div>
@@ -108,10 +117,13 @@
   </main>
   <footer class="wrap footer"><a class="footer-brand" href="#home"><img src="logo.svg" alt=""> VECTRON DYNAMICS</a><span>© <span id="year"></span> Vectron Dynamics · TaskBridge</span><a href="#home">Back to top ↑</a></footer>
   <div class="wrap footnote">When signed in, your tasks sync privately to your account. Email verification may be required. Keep your password private.</div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     (() => {
       const $ = (selector) => document.querySelector(selector);
-      const STORE_KEY = 'taskbridge.tasks.v1';\n      const db = window.supabase.createClient('https://qtiksxvytxznzgcprsxc.supabase.co','sb_publishable_0VQNiRiSPLtwgGEHY7uAEw_K5YIeLZl');\n      let currentUser = null;
+      const STORE_KEY = 'taskbridge.tasks.v1';
+      const db = window.supabase.createClient('https://qtiksxvytxznzgcprsxc.supabase.co','sb_publishable_0VQNiRiSPLtwgGEHY7uAEw_K5YIeLZl');
+      let currentUser = null;
       const THEME_KEY = 'taskbridge.theme.v1';
       const today = () => {
         const d = new Date();
@@ -131,8 +143,8 @@
       let activeFilter = 'all';
       let editingId = null;
       const save = () => {
-        try { localStorage.setItem(STORE_KEY, JSON.stringify(tasks)); } catch { $('#formMessage').textContent = 'Browser storage is unavailable. Your changes may not persist.'; }
-        if (currentUser) syncCloud().catch(err => { $('#formMessage').textContent = 'Cloud sync error: ' + err.message; });
+        if (!currentUser) { try { localStorage.setItem(STORE_KEY, JSON.stringify(tasks)); } catch { $('#formMessage').textContent = 'Browser storage is unavailable. Your changes may not persist.'; } }
+        else syncCloud().catch(err => { $('#formMessage').textContent = 'Cloud sync error: ' + err.message; });
       };
       const cloudRows = () => tasks.map(t => ({id:t.id,user_id:currentUser.id,title:t.title,notes:t.notes||'',due:t.due||null,priority:t.priority||'medium',category:t.category||'Personal',completed:!!t.completed,created_at:t.createdAt||new Date().toISOString(),updated_at:t.updatedAt||null,completed_at:t.completedAt||null}));
       const syncCloud = async () => {
@@ -183,7 +195,7 @@
       });
       $('#signOutBtn').addEventListener('click',async()=>{
         const {error}=await db.auth.signOut();if(error){authMessage(error.message,true);return;}
-        currentUser=null;try{tasks=JSON.parse(localStorage.getItem(STORE_KEY)||'[]');}catch{tasks=[];}
+        currentUser=null;tasks=[];
         authUI();render();authMessage('Signed out. Your cloud tasks remain in your account.');
       });
       db.auth.onAuthStateChange(async(_event,session)=>{
