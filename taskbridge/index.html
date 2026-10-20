@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#050505">
+  <meta name="description" content="TaskBridge by Vectron Dynamics — from inbox to action. Organize tasks, deadlines, and reminders in one place.">
+  <link rel="icon" type="image/svg+xml" href="../logo.svg">
+  <title>TaskBridge — Vectron Dynamics</title>
+  <style>
+    :root{color-scheme:dark;--bg:#050505;--panel:#101010;--line:#292929;--muted:#a1a1a1;--white:#f5f5f5}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--white);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+    a{color:inherit;text-decoration:none}.wrap{width:min(1100px,calc(100% - 40px));margin:auto}
+    header{position:sticky;top:0;z-index:5;background:#050505e8;backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+    .nav{height:72px;display:flex;align-items:center;justify-content:space-between;gap:18px}.brand{display:flex;align-items:center;gap:10px;font-size:11px;letter-spacing:.16em;font-weight:800}.brand img{width:34px;height:38px}
+    .navlinks{display:flex;align-items:center;gap:22px;font-size:11px;letter-spacing:.1em;color:#bbb}.navlinks a:hover{color:white}
+    .button{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid #777;padding:13px 17px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;background:transparent;color:white;cursor:pointer}
+    .primary{background:white;color:#050505;border-color:white}.button:hover{border-color:white}.hero{padding:100px 0 85px;display:grid;grid-template-columns:1.15fr .85fr;gap:50px;align-items:center}
+    .eyebrow{font-size:10px;letter-spacing:.23em;text-transform:uppercase;color:#aaa}.eyebrow:before{content:"";display:inline-block;width:22px;height:1px;background:#ddd;vertical-align:middle;margin-right:10px}
+    h1{font-size:clamp(54px,8vw,92px);line-height:.93;letter-spacing:-.075em;margin:25px 0}.muted{color:var(--muted);line-height:1.8;font-size:15px;max-width:540px}
+    .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}.visual{min-height:320px;border:1px solid #292929;display:grid;place-items:center;position:relative;overflow:hidden;background:radial-gradient(circle,#202020,#080808 70%)}
+    .orbit{width:190px;height:190px;border:1px solid #777;border-radius:50%;display:grid;place-items:center;position:relative;transform:rotateX(58deg)}.orbit:before,.orbit:after{content:"";position:absolute;inset:22px;border:1px solid #555;border-radius:50%}.orbit:after{inset:48px}.core{width:34px;height:34px;background:white;border-radius:50%;box-shadow:0 0 30px #fff}
+    section{padding:70px 0;border-top:1px solid #222}.sectionhead{font-size:clamp(32px,5vw,50px);letter-spacing:-.06em;margin:14px 0 20px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.card{border:1px solid #292929;background:linear-gradient(145deg,#121212,#080808);padding:25px;min-height:220px}.card h3{font-size:22px;margin:24px 0 10px}.card p{font-size:13px;line-height:1.8;color:#999}
+    .download{display:grid;grid-template-columns:1fr 1fr;gap:24px}.platform{border:1px solid #292929;padding:25px;background:#0b0b0b}.platform h3{margin:0 0 8px}.platform p{color:#999;font-size:13px;line-height:1.7}.soon{display:inline-block;border:1px solid #444;padding:7px 9px;color:#bbb;font-size:9px;letter-spacing:.12em;text-transform:uppercase}
+    .notice{border-left:2px solid #777;background:#111;padding:15px 18px;color:#aaa;font-size:12px;line-height:1.7;margin-top:22px}
+    footer{border-top:1px solid #222;padding:25px 0;color:#888;font-size:10px;letter-spacing:.1em;text-transform:uppercase;display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap}
+    @media(max-width:720px){.hero{grid-template-columns:1fr;padding:65px 0}.visual{min-height:260px}.grid{grid-template-columns:1fr}.download{grid-template-columns:1fr}.navlinks{gap:12px;font-size:9px}.brand{font-size:9px}.nav{height:auto;min-height:72px;flex-wrap:wrap;padding:12px 0}}
+  </style>
+</head>
+<body>
+  <header><div class="wrap nav">
+    <a class="brand" href="../"><img src="../logo.svg" alt="Vectron Dynamics logo"><span>VECTRON<br>DYNAMICS</span></a>
+    <nav class="navlinks" aria-label="Main navigation"><a href="../">MAIN WEBSITE ↗</a><a href="#features">FEATURES</a><a href="#download">APP DOWNLOAD</a></nav>
+  </div></header>
+  <main>
+    <section class="wrap hero" style="border:0">
+      <div><div class="eyebrow">A productivity product by Vectron Dynamics</div><h1>From inbox<br>to <span style="color:#777">action.</span></h1>
+        <p class="muted">TaskBridge is designed to help turn emails, voice notes, and everyday thoughts into organized tasks with deadlines and reminders — all in one focused workspace.</p>
+        <div class="actions"><a class="button primary" href="#download">Get the app ↘</a><a class="button" href="#features">Explore features ↓</a></div>
+        <p style="font-size:10px;color:#777;letter-spacing:.12em;margin-top:28px">TASKS · DEADLINES · REMINDERS</p>
+      </div>
+      <div class="visual" aria-label="TaskBridge abstract product illustration"><div class="orbit"><div class="core"></div></div></div>
+    </section>
+    <section id="features"><div class="wrap"><div class="eyebrow">01 / Built for everyday momentum</div><h2 class="sectionhead">Less chasing. More doing.</h2><p class="muted">A clear home for the things you need to remember and get done.</p>
+      <div class="grid">
+        <article class="card"><div class="eyebrow">01 / Capture</div><h3>Bring tasks together</h3><p>Plan for manual task entry, pasted messages, and email-based task suggestions in one place.</p></article>
+        <article class="card"><div class="eyebrow">02 / Organize</div><h3>Know what comes next</h3><p>Keep due dates, priorities, and upcoming work visible so you can focus on the next step.</p></article>
+        <article class="card"><div class="eyebrow">03 / Remember</div><h3>Stay on track</h3><p>Plan reminders around deadlines and manage tasks across your day.</p></article>
+      </div>
+    </div></section>
+    <section id="download"><div class="wrap"><div class="eyebrow">02 / Download TaskBridge</div><h2 class="sectionhead">Your next step, wherever you are.</h2><p class="muted">The mobile download links will be enabled when tested app builds are published. Check back here for official releases.</p>
+      <div class="download">
+        <article class="platform"><h3>Android</h3><p>Android app download will be available here after a release build is ready.</p><span class="soon">Coming soon</span></article>
+        <article class="platform"><h3>iOS</h3><p>The iPhone app link will be added when a build is available through an official distribution channel.</p><span class="soon">Coming soon</span></article>
+      </div>
+      <div class="notice">TaskBridge is currently presented as a product page. Mobile downloads and live task-management features are not yet published here. This page does not collect or transmit personal information.</div>
+      <div class="actions"><a class="button" href="https://github.com/VectronDynamics/vd/releases" target="_blank" rel="noopener noreferrer">Check official releases ↗</a><a class="button" href="../">Back to Vectron Dynamics ↗</a></div>
+    </div></section>
+  </main>
+  <footer class="wrap"><a class="brand" href="../">VECTRON DYNAMICS</a><span>© <span id="year"></span> Vectron Dynamics</span><a href="#download">App downloads</a></footer>
+  <script>document.querySelector('#year').textContent=new Date().getFullYear();</script>
+</body>
+</html>
